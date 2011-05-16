@@ -1,10 +1,18 @@
 source "http://rubygems.org"
+require 'yaml'
+YAML::ENGINE.yamler= 'syck'
+
+
 # Add dependencies required to use your gem here.
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
+
+gem "dwc-archive", ">= 0.5.13"
+
+
 group :development do
   gem "rspec", "~> 2.3.0"
   gem "cucumber", ">= 0"
