@@ -46,27 +46,20 @@ class Node
 
   def get_data(node_id, is_empty_node = false)
     node = @classification.normalized_data[node_id]
-    range = @node_path_size..node.classification_path.size
     if is_species?(node.current_name_canonical)
-      names = find_names(node)
-      if is_species?(node.classification_path[-2])
-        @leaves.last[:names] += names
-      else
-        res = {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
-        @leaves << res
-      end
+      add_node(@leaves, node)
     elsif is_empty_node
-      names = find_names(node)
-      @empty_nodes << {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
+      add_node(@empty_nodes, node)
     end
   end
 
-  def find_names(node)
+  def add_node(res, node)
+    range = @node_path_size..node.classification_path.size
     names =  [{:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}]
     node.synonyms.each do |syn|
       names << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
     end
-    names
+    res << {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
   end
 
   def is_species?(name_string)
@@ -75,10 +68,6 @@ class Node
 
 end
 
-#
-# n = Node.new(db, paths_file)
-# leaves = n.leaves node_id
-#
 if __FILE__ == $0
 
   unless ARGV[1]
@@ -92,9 +81,9 @@ if __FILE__ == $0
   node_id = ARGV[1]
   paths_file = ARGV[2] ? ARGV[2] : "node_leaves.json"
 
-  n = Node.new(dwca_file)
-  l, e = n.leaves(node_id)
-  names = l.map {|n| n[:names].map {|nn| nn[:name]}}
+  node = Node.new(dwca_file)
+  leaves, empty_nodes = node.leaves(node_id)
+  names = leaves.map {|n| n[:names].map {|nn| nn[:name]}}
   f = open(paths_file,'w')
-  f.write JSON.dump({:empty_nodes => e, :leaves => l})
+  f.write JSON.dump({:empty_nodes => empty_nodes, :leaves => leaves})
 end
