@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "dwc-archive"
+require 'json'
 
 class Node
   attr_reader :classification
@@ -15,6 +16,7 @@ class Node
     @classification = DarwinCore::ClassificationNormalizer.new(@dwca)
     @classification.normalize
     @leaves = []
+    @empty_nodes = []
   end
 
   def leaves(node_id)
@@ -26,33 +28,45 @@ class Node
       current_node = current_node[path.shift]
     end
     walk_tree(current_node)
-    @leaves
+    [@leaves, @empty_nodes]
   end
 
   private
 
-  def walk_tree(current_node, active_leaf = nil, depth = 0)
-    current_node.keys.each do |key|
-      get_data(key)
-      walk_tree(current_node[key])
+  def walk_tree(current_node, prev_node_key = nil)
+    if current_node.keys.empty? && prev_node_key
+      get_data(prev_node_key, true)
+    else
+      current_node.keys.each do |key|
+        get_data(key)
+        walk_tree(current_node[key], key)
+      end
     end
   end
 
-  def get_data(node_id)
+  def get_data(node_id, is_empty_node = false)
     node = @classification.normalized_data[node_id]
+    range = @node_path_size..node.classification_path.size
     if is_species?(node.current_name_canonical)
-      current_path_size = node.classification_path.size
-      names =  [{:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}]
-      node.synonyms.each do |syn|
-        names << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
-      end
+      names = find_names(node)
       if is_species?(node.classification_path[-2])
         @leaves.last[:names] += names
       else
-        res = {:path => node.classification_path[@node_path_size..current_path_size], :path_ids => node.classification_path_id[@node_path_size..current_path_size], :names => names}
+        res = {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
         @leaves << res
       end
+    elsif is_empty_node
+      names = find_names(node)
+      @empty_nodes << {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
     end
+  end
+
+  def find_names(node)
+    names =  [{:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}]
+    node.synonyms.each do |syn|
+      names << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
+    end
+    names
   end
 
   def is_species?(name_string)
@@ -79,10 +93,8 @@ if __FILE__ == $0
   paths_file = ARGV[2] ? ARGV[2] : "node_leaves.json"
 
   n = Node.new(dwca_file)
-  l = n.leaves(node_id)
+  l, e = n.leaves(node_id)
   names = l.map {|n| n[:names].map {|nn| nn[:name]}}
-  require 'ruby-debug'; debugger
-  puts ''
-
-
+  f = open(paths_file,'w')
+  f.write JSON.dump({:empty_nodes => e, :leaves => l})
 end
