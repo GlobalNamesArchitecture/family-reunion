@@ -51,11 +51,11 @@ class Node
 
   def add_node(res, node)
     range = @node_path_size..node.classification_path.size
-    current_name = {:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}
+    valid_name = {:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :valid, :status => node.status}
     synonyms = node.synonyms.inject([]) do |res, syn|
       res << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
     end
-    res << {:id => node.classification_path_id.last, :path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :current_name => current_name, :synonyms => synonyms}
+    res << {:id => node.classification_path_id.last, :path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :valid_name => valid_name, :synonyms => synonyms}
   end
 
   def is_species?(name_string)

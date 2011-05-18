@@ -11,6 +11,7 @@ YAML::ENGINE.yamler= 'syck'
 # Include everything needed to run rake, tests, features, etc.
 
 gem "dwc-archive", ">= 0.5.13"
+gem "taxamatch_rb", ">= 0.6.5"
 
 
 group :development do

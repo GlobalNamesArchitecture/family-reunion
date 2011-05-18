@@ -14,5 +14,7 @@ describe FamilyReunion do
     merges = @fr.merge
     merges.is_a?(Hash).should be_true
     merges.size.should > 0
+    require 'ruby-debug'; debugger
+    puts ''
   end
 end
