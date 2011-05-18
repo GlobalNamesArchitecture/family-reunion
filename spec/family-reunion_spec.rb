@@ -2,10 +2,17 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe FamilyReunion do
   before(:all) do
-    @fr = FamilyReunion.new(@ants_primary_node, @ants_secondary_node)
+    @fr = FamilyReunion.new(FamilyReunion::Spec::Config.ants_primary_node, FamilyReunion::Spec::Config.ants_secondary_node)
+  end
+
+  it "should generate instances of nodes" do
+    @fr.primary_node.is_a?(FamilyReunion::Node).should be_true
+    @fr.secondary_node.is_a?(FamilyReunion::Node).should be_true
   end
 
   it "should merge" do
-    merges, empty_nodes = @fr.merge
+    merges = @fr.merge
+    merges.is_a?(Hash).should be_true
+    merges.size.should > 0
   end
 end

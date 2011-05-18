@@ -33,37 +33,33 @@ class Node
 
   private
 
-  def walk_tree(current_node, prev_node_key = nil)
-    if current_node.keys.empty? && prev_node_key
-      get_data(prev_node_key, true)
-    else
-      current_node.keys.each do |key|
-        get_data(key)
-        walk_tree(current_node[key], key)
-      end
+  def walk_tree(current_node)
+    current_node.keys.each do |key|
+      get_data(key, current_node[key].empty?)
+      walk_tree(current_node[key])
     end
   end
 
-  def get_data(node_id, is_empty_node = false)
+  def get_data(node_id, node_is_empty)
     node = @classification.normalized_data[node_id]
     if is_species?(node.current_name_canonical)
       add_node(@leaves, node)
-    elsif is_empty_node
+    elsif node_is_empty
       add_node(@empty_nodes, node)
     end
   end
 
   def add_node(res, node)
     range = @node_path_size..node.classification_path.size
-    names =  [{:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}]
-    node.synonyms.each do |syn|
-      names << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
+    current_name = {:name => node.current_name, :canonical_name => node.current_name_canonical, :type => :current, :status => node.status}
+    synonyms = node.synonyms.inject([]) do |res, syn|
+      res << {:name => syn.name, :canonical_name => syn.canonical_name, :type => :synonym, :status => syn.status}
     end
-    res << {:path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :names => names}
+    res << {:id => node.classification_path_id.last, :path => node.classification_path[range], :path_ids => node.classification_path_id[range], :rank => node.rank, :current_name => current_name, :synonyms => synonyms}
   end
 
   def is_species?(name_string)
-    name_string.split(/\s+/).size >=2
+    name_string.split(/\s+/).size >= 2
   end
 
 end
@@ -83,7 +79,6 @@ if __FILE__ == $0
 
   node = Node.new(dwca_file)
   leaves, empty_nodes = node.leaves(node_id)
-  names = leaves.map {|n| n[:names].map {|nn| nn[:name]}}
   f = open(paths_file,'w')
   f.write JSON.dump({:empty_nodes => empty_nodes, :leaves => leaves})
 end

@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'family-reunion'
+require 'ostruct'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -11,5 +12,11 @@ RSpec.configure do |config|
   
 end
 
-@ants_primary_node = JSON.load(open(File.join(File.dirname(__FILE__), 'fixtures', 'ants_primary.json')).read)
-@ants_secondary_node = JSON.load(open(File.join(File.dirname(__FILE__), 'fixtures', 'ants_secondary.json')).read)
+class FamilyReunion
+  class Spec
+    Config = OpenStruct.new(
+      :ants_primary_node => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'ants_primary.json')).read, :symbolize_names => true),
+      :ants_secondary_node => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'ants_secondary.json')).read, :symbolize_names => true),
+    )
+  end
+end
