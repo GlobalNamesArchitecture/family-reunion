@@ -16,3 +16,26 @@ describe FamilyReunion::FuzzyMatcher do
     end
   end
 end
+
+__END__
+  def get_synonym_fuzzy_matches
+    @valid_to_syn_fuzzy_matches = @primary_valid_names_set.inject({}) {|res, n| res[n] = @fuzzy_matcher.match_synonym_names(n); res}.select {|key, value| value != nil}
+    @syn_to_valid_fuzzy_matches = @primary_synonyms_set.inject({}) {|res, n| res[n] = @fuzzy_matcher.match_valid_names(n); res}.select {|key, value| value != nil}
+    @syn_to_syn_fuzzy_matches = @primary_synonyms_set.inject({}) {|res, n| res[n] = @fuzzy_matcher.match_synonym_names(n); res}.select {|key, value| value != nil}
+    format_fuzzy_matches(@valid_to_syn_fuzzy_matches) 
+    format_fuzzy_matches(@syn_to_valid_fuzzy_matches) 
+    format_fuzzy_matches(@syn_to_syn_fuzzy_matches) 
+  end
+
+  def get_valid_fuzzy_matches
+    @valid_to_valid_fuzzy_matches = @primary_valid_names_set.inject({}) {|res, n| res[n] = @fuzzy_matcher.match_valid_names(n); res}.select {|key, value| value != nil}
+    format_fuzzy_matches(@valid_to_valid_fuzzy_matches) 
+  end
+  
+  def fuzzy_match_leaves
+    get_valid_fuzzy_matches
+    get_synonym_fuzzy_matches
+  end
+
+
+
