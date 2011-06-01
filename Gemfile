@@ -21,4 +21,5 @@ group :development do
   gem "jeweler", "~> 1.6.0"
   gem "rcov", ">= 0"
   gem "ruby-debug19"
+  gem "ruby-prof"
 end

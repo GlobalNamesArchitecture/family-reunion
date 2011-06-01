@@ -11,19 +11,33 @@ class FamilyReunion
       matches = {}
       match_candidates = @tp.get_match_candidates(list1, list2)
       [:uninomials, :binomials, :trinomials].each do |bucket|
-        match_candidates.each do |name1, possible_matches|
-          possible_matches.each do |name2|
-            if self.send("#{bucket}_match?", name1, name2)
-              matches.has_key?(name1) ? matches[name1] << name2 : matches[name1] = [name2]
+        match_candidates[bucket].each do |name1, possible_matches|
+          possible_matches[:candidates].each do |name2|
+            if self.send("#{bucket}_match?", name1, name2[0])
+              matches.has_key?(name1) ? matches[name1] << name2[0] : matches[name1] = [name2[0]]
             end
           end
         end
       end
-      require 'ruby-debug'; debugger
       matches 
     end
 
+    def match_nodes(nodes)
+      require 'ruby-debug'; debugger
+      puts ''
+    end
 
+    def uninomials_match?(name1, name2)
+      @tm.taxamatch(name1, name2)      
+    end
+
+    def binomials_match?(name1, name2)
+      uninomials_match?(name1, name2)
+    end
+
+    def trinomials_match?(name1, name2)
+      uninomials_match?(name1, name2)
+    end
 
   end
 end

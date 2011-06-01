@@ -73,7 +73,7 @@ class FamilyReunion
       
       key = [word1, word2].sort.join(':')
       cached = @cache.similar_words[key]
-      return cached if cached
+      return cached if cached != nil
         
       are_similar = false
       if word1 == word2
@@ -92,9 +92,9 @@ class FamilyReunion
 
     def get_letters(word)
       letters = @cache.word_letters[word]
-      unless letters
+      if letters == nil
         letters = word.split('').uniq
-        @cache.word_letters[letters]
+        @cache.word_letters[word] = letters
       end
       letters
     end
