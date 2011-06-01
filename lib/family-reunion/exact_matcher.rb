@@ -34,9 +34,9 @@ class FamilyReunion
       primary_synonyms_set = Set.new(@fr.primary_node.synonyms_hash.keys)
       secondary_synonyms_set = Set.new(@fr.secondary_node.synonyms_hash.keys)
       res = {}
-      res[:valid_to_synonym] = @fr.primary_valid_names_set & secondary_synonyms_set
-      res[:synonym_to_valid] = primary_synonyms_set & @fr.secondary_valid_names_set
-      res[:synonym_to_synonym] =   primary_synonyms_set & secondary_synonyms_set
+      res[:valid_to_synonym] = @fr.primary_valid_names_set & @fr.secondary_synonyms_set
+      res[:synonym_to_valid] = @fr.primary_synonyms_set & @fr.secondary_valid_names_set
+      res[:synonym_to_synonym] = @fr.primary_synonyms_set & @fr.secondary_synonyms_set
       res
     end
     
