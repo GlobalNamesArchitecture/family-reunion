@@ -1,48 +1,58 @@
 class FamilyReunion
   class FuzzyMatcher
-    def initialize(family_reunion, secondary_nonmatched_ids = [])
+    def initialize(family_reunion)
       @fr = family_reunion
       @tw = FamilyReunion::TaxamatchWrapper.new
     end
 
     def merge
-      valid_matches = get_valid_matches
-      #add_valid_matches(valid_matches)
+      add_matches(get_valid_matches)
+      add_matches(get_valid_to_synonym_matches)
+      add_matches(get_synonym_to_valid_matches)
+      add_matches(get_synonym_to_synonym_matches)
     end
 
     def get_valid_matches
       primary_names = @fr.primary_valid_names_set - @fr.secondary_valid_names_set
       secondary_names = @fr.secondary_valid_names_set - @fr.primary_valid_names_set
-      canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
-      match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, :valid_name, :valid_name)
-      @tw.match_nodes(match_nodes_candidates)
+      make_match(primary_names, secondary_names, :valid_name, :valid_name)
     end
 
     def get_valid_to_synonym_matches
       primary_names = @fr.primary_valid_names_set - @fr.secondary_synonyms_set
       secondary_names = @fr.secondary_synonyms_set - @fr.primary_valid_names_set
-      canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
-      match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, :valid_name, :synonym)
-      @tw.match_nodes(match_nodes_candidates)
+      make_match(primary_names, secondary_names, :valid_name, :synonym)
     end
 
     def get_synonym_to_valid_matches
       primary_names = @fr.primary_synonyms_set - @fr.secondary_valid_names_set
       secondary_names = @fr.secondary_valid_names_set - @fr.primary_synonyms_set
-      canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
-      match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, :synonym, :valid_name)
-      @tw.match_nodes(match_nodes_candidates)
+      make_match(primary_names, secondary_names, :synonym, :valid_name)
     end
 
     def get_synonym_to_synonym_matches
       primary_names = @fr.primary_synonyms_set - @fr.secondary_synonyms_set
       secondary_names = @fr.secondary_synonyms_set - @fr.primary_synonyms_set
-      canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
-      match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, :synonym, :synonym)
-      @tw.match_nodes(match_nodes_candidates)
+      make_match(primary_names, secondary_names, :synonym, :synonym)
     end
 
     private
+
+    def add_matches(matched_nodes)
+      matches_nodes.each do |primary_node, secondary_nodes|
+        primary_id = primary_node[:id]
+        secondary_ids = secondary_nodes.map { |n| n[:id] }
+        @fr.merges[primary_id] 
+      end
+    end
+
+    end
+    
+    def make_match(primary_names, secondary_names, primary_name_type, secondary_name_type)
+      canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
+      match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, primary_name_type, secondary_name_type)
+      @tw.match_nodes(match_nodes_candidates)
+    end
 
     def get_nodes_from_canonicals(canonical_matches, primary_name_type, secondary_name_type)
       res = []

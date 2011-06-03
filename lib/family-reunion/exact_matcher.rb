@@ -3,7 +3,6 @@ class FamilyReunion
 
     def initialize(family_reunion)
       @fr = family_reunion
-      @matched_secondary_ids = []
     end
 
     def merge
@@ -25,7 +24,6 @@ class FamilyReunion
       valid_matches.each do |name|
         primary_id = @fr.primary_node.valid_names_hash[name][:id]
         secondary_id = @fr.secondary_node.valid_names_hash[name][:id]
-        @matched_secondary_ids << secondary_id
         @fr.merges[primary_id] = {:matches => {secondary_id.to_s => {:match_type => :valid_to_valid}}, :nonmatches => []}
       end
     end
@@ -77,7 +75,6 @@ class FamilyReunion
     def get_valid_name_ids(name)
       primary_ids = get_ids_from_node(name, @fr.primary_node)
       secondary_ids = get_ids_from_node(name, @fr.secondary_node)
-      @matched_secondary_ids += secondary_ids
       [primary_ids, secondary_ids]
     end
 

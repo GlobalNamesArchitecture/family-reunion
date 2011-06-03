@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe FamilyReunion::FuzzyMatcher do
   before(:all) do
     @conf = FamilyReunion::Spec::Config
-    fr = FamilyReunion.new(@conf.ants_primary_node, @conf.ants_secondary_node)
-    @fm = FamilyReunion::FuzzyMatcher.new(fr)
+    @fr = FamilyReunion.new(@conf.ants_primary_node, @conf.ants_secondary_node)
+    @fm = FamilyReunion::FuzzyMatcher.new(@fr)
   end
 
   it "should be able to match valid names" do
@@ -21,6 +21,12 @@ describe FamilyReunion::FuzzyMatcher do
 
   it "should be able to match synonyms to synonyms" do
     @fm.get_synonym_to_synonym_matches.should == [[{:id=>"invasiveants:tid:1397", :path=>["Formicidae", "Camponotus", "Camponotus sexguttatus"], :path_ids=>["invasiveants:tid:1381", "invasiveants:tid:1393", "invasiveants:tid:1397"], :rank=>"species", :valid_name=>{:name=>"Camponotus sexguttatus (Fabricius, 1793)", :canonical_name=>"Camponotus sexguttatus", :type=>"valid", :status=>nil}, :synonyms=>[{:name=>"Formica albofasciata Smith, F., 1862", :canonical_name=>"Formica albofasciata", :type=>"synonym", :status=>"synonym"}, {:name=>"Formica bimaculata Smith, F., 1858", :canonical_name=>"Formica bimaculata", :type=>"synonym", :status=>"synonym"}, {:name=>"Formica ruficeps Smith, F., 1804", :canonical_name=>"Formica ruficeps", :type=>"synonym", :status=>"synonym"}], :name_to_match=>"Formica ruficeps Smith, F., 1804"}, [{:id=>"hex10357934", :path=>["Formicidae", "Formica", "Formica lavateri"], :path_ids=>["hex100521", "hex1023020", "hex10357934"], :rank=>"species", :valid_name=>{:name=>"Formica lavateri Heer, 1850", :canonical_name=>"Formica lavateri", :type=>"valid", :status=>"accepted"}, :synonyms=>[{:name=>"Formida ruficeps Smith, F., 1804", :canonical_name=>"Formida ruficeps", :type=>"synonym", :status=>"synonym"}], :name_to_match=>"Formida ruficeps Smith, F., 1804"}]]]
+  end
+
+  it "should be able to add matches to merges object" do
+    matched_nodes =  [[{:id=>"invasiveants:tid:1453", :path=>["Formicidae", "Pachycondlya", "Pachycondlya solitaria"], :path_ids=>["invasiveants:tid:1381", "invasiveants:tid:1452", "invasiveants:tid:1453"], :rank=>"species", :valid_name=>{:name=>"Pachycondlya solitaria (Smith, F. 1860)", :canonical_name=>"Pachycondlya solitaria", :type=>"valid", :status=>nil}, :synonyms=>[], :name_to_match=>"Pachycondlya solitaria (Smith, F. 1860)"}, [{:id=>"hex10354887", :path=>["Formicidae", "Pachycondyla", "Pachycondyla solitaria"], :path_ids=>["hex100521", "hex1022882", "hex10354887"], :rank=>"species", :valid_name=>{:name=>"Pachycondyla solitaria (Smith, 1860)", :canonical_name=>"Pachycondyla solitaria", :type=>"valid", :status=>"accepted"}, :synonyms=>[], :name_to_match=>"Pachycondyla solitaria (Smith, 1860)"}]]]
+    @fm.add_matches(matched_nodes)
+    @fr.merges.should == ''
   end
 
 end

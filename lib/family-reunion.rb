@@ -24,21 +24,24 @@ class FamilyReunion
   end
 
   def merge(with_fuzzy_matching = true)
-    matched_secondary_ids = merge_exact_matches
-    nonmatched_secondary_ids = merge_fuzzy_matches(matched_secondary_ids) if with_fuzzy_matching
-    add_nonmatched_nodes(nonmatched_secondary_ids)
+    merge_exact_matches
+    merge_fuzzy_matches if with_fuzzy_matching
+    add_nonmatched_nodes(get_nonmatched_secondary_ids)
     @merges
   end
 
   private
+
+  def get_nonmatched_secondary_ids
+  end
 
   def merge_exact_matches
     unmatched_names = ExactMatcher.new(self).merge
     unmatched_names
   end
 
-  def merge_fuzzy_matches(matched_secondary_ids)
-    unmatched_names = FuzzyMatcher.new(self, matched_secondary_ids).merge
+  def merge_fuzzy_matches
+    unmatched_names = FuzzyMatcher.new(self).merge
     unmatched_names
   end
   
