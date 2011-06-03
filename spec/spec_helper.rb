@@ -21,6 +21,7 @@ class FamilyReunion
       :valid_names_secondary => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'valid_names_strings_secondary.json')).read),
       :synonyms_primary => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'synonyms_strings_primary.json')).read),
       :synonyms_secondary => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'synonyms_strings_secondary.json')).read),
+      :nodes_to_match => JSON.parse(open(File.join(File.dirname(__FILE__), 'fixtures', 'nodes_to_match.json')).read, :symbolize_names => true),
     )
   end
 end

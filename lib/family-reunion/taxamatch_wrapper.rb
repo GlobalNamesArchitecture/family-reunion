@@ -23,8 +23,19 @@ class FamilyReunion
     end
 
     def match_nodes(nodes)
-      require 'ruby-debug'; debugger
-      puts ''
+      res = []
+      nodes.each do |primary_node, secondary_nodes|
+        secondary_nodes.each do |secondary_node|
+          if @tm.taxamatch(primary_node[:name_to_match], secondary_node[:name_to_match])
+            if res.last && res.last[0][:id] == primary_node[:id]
+              res.last[1] << secondary_node
+            else
+              res << [primary_node, [secondary_node]]
+            end
+          end
+        end
+      end
+      res
     end
 
     def uninomials_match?(name1, name2)
