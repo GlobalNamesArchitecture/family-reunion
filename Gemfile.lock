@@ -29,6 +29,8 @@ GEM
     json (1.5.1)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
+    mocha (0.9.8)
+      rake
     parsley-store (0.2.2)
       biodiversity
       redis
@@ -55,6 +57,7 @@ GEM
     ruby-prof (0.10.7)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
+    shoulda (2.11.3)
     taxamatch_rb (0.6.5)
       RubyInline
       biodiversity (>= 0.5.13)
@@ -70,8 +73,10 @@ DEPENDENCIES
   cucumber
   dwc-archive (>= 0.5.13)
   jeweler (~> 1.6.0)
+  mocha
   rcov
   rspec (~> 2.3.0)
   ruby-debug19
   ruby-prof
+  shoulda
   taxamatch_rb (>= 0.6.5)

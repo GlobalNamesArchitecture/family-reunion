@@ -6,6 +6,7 @@ require 'family-reunion/exact_matcher'
 require 'family-reunion/fuzzy_matcher'
 require 'family-reunion/taxamatch_wrapper'
 require 'family-reunion/taxamatch_preprocessor'
+require 'family-reunion/nomatch_organizer'
 
 
 class FamilyReunion
@@ -26,13 +27,14 @@ class FamilyReunion
   def merge(with_fuzzy_matching = true)
     merge_exact_matches
     merge_fuzzy_matches if with_fuzzy_matching
-    add_nonmatched_nodes(get_nonmatched_secondary_ids)
+    merge_nomatchers
     @merges
   end
 
   private
 
-  def get_nonmatched_secondary_ids
+  def merge_nomatchers
+    NomatchOrganizer.new(self).merge
   end
 
   def merge_exact_matches

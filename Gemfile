@@ -22,4 +22,6 @@ group :development do
   gem "rcov", ">= 0"
   gem "ruby-debug19"
   gem "ruby-prof"
+  gem "shoulda"
+  gem "mocha"
 end
