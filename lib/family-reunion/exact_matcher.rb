@@ -1,5 +1,5 @@
 class FamilyReunion
-  class ExactMatcher 
+  class ExactMatcher
 
     def initialize(family_reunion)
       @fr = family_reunion
@@ -11,9 +11,9 @@ class FamilyReunion
       synonym_matches = get_synonym_matches
       add_synonym_matches(synonym_matches)
     end
-    
+
     private
-  
+
     def get_valid_matches
       valid_matches = @fr.primary_valid_names_set & @fr.secondary_valid_names_set
     end
@@ -27,7 +27,7 @@ class FamilyReunion
         @fr.merges[primary_id] = {:matches => {secondary_id.to_s => {:match_type => :valid_to_valid}}, :nonmatches => []}
       end
     end
-    
+
     def get_synonym_matches
       primary_synonyms_set = Set.new(@fr.primary_node.synonyms_hash.keys)
       secondary_synonyms_set = Set.new(@fr.secondary_node.synonyms_hash.keys)
@@ -37,7 +37,7 @@ class FamilyReunion
       res[:synonym_to_synonym] = @fr.primary_synonyms_set & @fr.secondary_synonyms_set
       res
     end
-    
+
     def add_synonym_matches(matches)
       matches.each do |match_type, match_set|
         format_synonym_matches(match_set, match_type)
@@ -49,7 +49,7 @@ class FamilyReunion
         primary_ids, secondary_ids = get_valid_name_ids(name)
         secondary_id_matches = format_secondary_id_matches(secondary_ids, match_type)
         primary_ids.each do |primary_id|
-          add_record_to_merges(primary_id, secondary_id_matches)    
+          add_record_to_merges(primary_id, secondary_id_matches)
         end
       end
     end
@@ -59,13 +59,13 @@ class FamilyReunion
         secondary_id_matches.each do |key, val|
           @fr.merges[primary_id][:matches][key] = val unless @fr.merges[primary_id][:matches].has_key?(key)
         end
-      else 
-        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => []} 
+      else
+        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => []}
       end
     end
-    
+
     def format_secondary_id_matches(secondary_ids, match_type)
-      secondary_ids.inject({}) do |res, i| 
+      secondary_ids.inject({}) do |res, i|
         i = i.to_s
         res[i] = {:match_type => match_type} unless res.has_key?(i)
         res

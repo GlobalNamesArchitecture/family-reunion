@@ -6,10 +6,10 @@ class FamilyReunion
     end
 
     def merge
-      add_matches(get_valid_matches)
-      add_matches(get_valid_to_synonym_matches)
-      add_matches(get_synonym_to_valid_matches)
-      add_matches(get_synonym_to_synonym_matches)
+      add_matches(get_valid_matches, :fuzzy_valid_to_valid)
+      add_matches(get_valid_to_synonym_matches, :fuzzy_valid_to_synonym)
+      add_matches(get_synonym_to_valid_matches, :fuzzy_synonym_to_valid)
+      add_matches(get_synonym_to_synonym_matches, :fuzzy_synonym_to_synonym)
     end
 
     def get_valid_matches
@@ -38,16 +38,35 @@ class FamilyReunion
 
     private
 
-    def add_matches(matched_nodes)
-      matches_nodes.each do |primary_node, secondary_nodes|
+    def add_matches(matched_nodes, match_type)
+      matched_nodes.each do |primary_node, secondary_nodes|
         primary_id = primary_node[:id]
         secondary_ids = secondary_nodes.map { |n| n[:id] }
-        @fr.merges[primary_id] 
+        secondary_id_matches = format_secondary_id_matches(secondary_ids, match_type)
+        add_record_to_merges(primary_id, secondary_id_matches)
       end
     end
 
+    #TODO copied and pasted from exact_matcher -- needs refactoring
+    def format_secondary_id_matches(secondary_ids, match_type)
+      secondary_ids.inject({}) do |res, i|
+        i = i.to_s
+        res[i] = {:match_type => match_type} unless res.has_key?(i)
+        res
+      end
     end
-    
+
+    #TODO copied and pasted from exact_matcher -- needs refactoring
+    def add_record_to_merges(primary_id, secondary_id_matches)
+      if @fr.merges.has_key?(primary_id)
+        secondary_id_matches.each do |key, val|
+          @fr.merges[primary_id][:matches][key] = val unless @fr.merges[primary_id][:matches].has_key?(key)
+        end
+      else
+        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => []}
+      end
+    end
+
     def make_match(primary_names, secondary_names, primary_name_type, secondary_name_type)
       canonical_matches = @tw.match_canonicals_lists(primary_names, secondary_names)
       match_nodes_candidates = get_nodes_from_canonicals(canonical_matches, primary_name_type, secondary_name_type)
