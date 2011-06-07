@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{family-reunion}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Dmitry Mozzherin"]
+  s.authors = ["Dmitry Mozzherin", "David Shorthouse"]
   s.date = %q{2011-06-07}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{An algorithm to merge related nodes of two taxonomic hierarchies with synonym information}
   s.email = %q{dmozzherin@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "family-reunion.gemspec",
     "features/family-reunion.feature",
     "features/step_definitions/family-reunion_steps.rb",
     "features/support/env.rb",
@@ -59,7 +60,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{An algorithm to merge related nodes of two taxonomic hierarchies}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
