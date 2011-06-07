@@ -1,5 +1,5 @@
 class FamilyReunion
-  class Node
+  class TopNode
     attr :data
 
     def initialize(data)

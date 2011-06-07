@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe FamilyReunion::Node do
+describe FamilyReunion::TopNode do
   before(:all) do
     @conf = FamilyReunion::Spec::Config
-    @node = FamilyReunion::Node.new(@conf.ants_primary_node)
+    @node = FamilyReunion::TopNode.new(@conf.ants_primary_node)
   end
 
   it "should get hash with ids as keys for valid names" do

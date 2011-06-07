@@ -44,7 +44,7 @@ class FamilyReunion
       matched_nodes.each do |primary_node, secondary_nodes|
         primary_id = primary_node[:id]
         secondary_ids = secondary_nodes.map { |n| n[:id] }
-        secondary_id_matches = format_secondary_id_matches(secondary_ids, match_type)
+        secondary_id_matches = format_secondary_id_for_merge(secondary_ids, match_type)
         add_record_to_merges(primary_id, secondary_id_matches)
       end
     end
@@ -75,14 +75,14 @@ class FamilyReunion
       end
     end
 
-    def get_valid_name_node(root_node, name)
-      node = root_node.valid_names_hash[name]
+    def get_valid_name_node(top_node, name)
+      node = top_node.valid_names_hash[name]
       node.merge!({ :name_to_match => node[:valid_name][:name] })
       [node]
     end
 
-    def get_synonym_node(root_node, name)
-      nodes = root_node.synonyms_hash[name]
+    def get_synonym_node(top_node, name)
+      nodes = top_node.synonyms_hash[name]
       nodes.each do |n|
         synonym_name = n[:synonyms].select { |s| s[:canonical_name] == name }.first[:name]
         n.merge!({ :name_to_match => synonym_name })

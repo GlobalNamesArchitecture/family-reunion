@@ -6,8 +6,8 @@ describe FamilyReunion do
   end
 
   it "should generate instances of nodes" do
-    @fr.primary_node.is_a?(FamilyReunion::Node).should be_true
-    @fr.secondary_node.is_a?(FamilyReunion::Node).should be_true
+    @fr.primary_node.is_a?(FamilyReunion::TopNode).should be_true
+    @fr.secondary_node.is_a?(FamilyReunion::TopNode).should be_true
   end
 
   it "should merge" do

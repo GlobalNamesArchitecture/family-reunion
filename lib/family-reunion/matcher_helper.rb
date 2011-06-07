@@ -1,7 +1,7 @@
 class FamilyReunion
   module MatcherHelper
     private
-    def format_secondary_id_matches(secondary_ids, match_type)
+    def format_secondary_id_for_merge(secondary_ids, match_type)
       secondary_ids.inject({}) do |res, i|
         i = i.to_s
         res[i] = {:match_type => match_type} unless res.has_key?(i)
