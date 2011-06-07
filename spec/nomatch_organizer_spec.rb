@@ -5,10 +5,19 @@ describe FamilyReunion::NomatchOrganizer do
     @conf = FamilyReunion::Spec::Config
     @fr = FamilyReunion.new(@conf.ants_primary_node, @conf.ants_secondary_node)
     @no = FamilyReunion::NomatchOrganizer.new(@fr)
-    @fr.stubs(:merges => @conf.matched_merges)
+    @merges = @conf.matched_merges
   end
 
   it "should find nonmatched secondary nodes" do
+    @fr.stubs(:merges => @merges)
     nomatch_secondary_ids = @no.get_nomach_secondary_ids
+    nomatch_secondary_ids.size.should == 10095
+    nomatch_secondary_ids.uniq.size.should == nomatch_secondary_ids.size
+  end
+
+  it "should be able to assign nomatches to branches in primary node" do
+    @fr.stubs(:merges => @merges)
+    @no.merge
+    puts ''
   end
 end

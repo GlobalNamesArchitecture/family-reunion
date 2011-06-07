@@ -15,7 +15,7 @@ class FamilyReunion
       match_ids = @fr.merges.map { |key, val| val[:matches].keys }.flatten.uniq
       empty_nodes_ids =  @fr.secondary_node.data[:empty_nodes].map { |node| node[:id].to_sym }
       valid_names_ids = @fr.secondary_node.ids_hash.keys.map { |k| k }
-      @nomatch_secondary_ids = (valid_names_ids - match_ids) + empty_nodes_ids
+      @nomatch_secondary_ids = valid_names_ids - match_ids
     end
 
     def organize_nonmatches(nomatch_secondary_ids)
@@ -42,14 +42,14 @@ class FamilyReunion
           break
         end
       end
-      add_merged_node(@fr.primary_node.root_id, node[:id])
+      add_merged_node(@fr.primary_node.root_id, node[:id]) unless found_node
     end
 
     def add_merged_node(primary_node_id, secondary_node_id)
       if @fr.merges.has_key?(primary_node_id)
-        @fr.merges[primary_node_id.to_s][:nonmatches] << secondary_node_id
+        @fr.merges[primary_node_id][:nonmatches] << secondary_node_id
       else
-        @fr.merges[primary_node_id.to_s] = {:matches => [], :nonmatches => [secondary_node_id]}
+        @fr.merges[primary_node_id] = {:matches => [], :nonmatches => [secondary_node_id]}
       end
     end
 

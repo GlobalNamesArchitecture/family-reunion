@@ -32,6 +32,9 @@ class FamilyReunion
       @valid_names_duplicates.keys.each do |k|
         @valid_names_duplicates[k] << @valid_names_hash.delete(k)
       end
+      data[:empty_nodes].each do |row|
+        update_paths_hash(row)
+      end
       @valid_names_hash
     end
 
