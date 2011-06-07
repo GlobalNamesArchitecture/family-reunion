@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "family-reunion"
-  gem.homepage = "http://github.com/dimus/family-reunion"
+  gem.homepage = "http://github.com/GlobalNamesArchitecture/family-reunion"
   gem.license = "MIT"
   gem.summary = %Q{An algorithm to merge related nodes of two taxonomic hierarchies}
   gem.description = %Q{An algorithm to merge related nodes of two taxonomic hierarchies with synonym information}
