@@ -17,10 +17,10 @@ Jeweler::Tasks.new do |gem|
   gem.name = "family-reunion"
   gem.homepage = "http://github.com/dimus/family-reunion"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{An algorithm to merge related nodes of two taxonomic hierarchies}
+  gem.description = %Q{An algorithm to merge related nodes of two taxonomic hierarchies with synonym information}
   gem.email = "dmozzherin@gmail.com"
-  gem.authors = ["Dmitry Mozzherin"]
+  gem.authors = ["Dmitry Mozzherin", "David Shorthouse"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
