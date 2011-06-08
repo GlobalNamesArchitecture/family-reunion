@@ -7,6 +7,7 @@ class FamilyReunion
     end
 
     def merge
+      FamilyReunion.logger_write(@fr.object_id, "Filling gaps with new taxa")
       organize_nonmatches(get_nomach_secondary_ids)
     end
 

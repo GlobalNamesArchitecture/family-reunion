@@ -48,6 +48,7 @@ class FamilyReunion
     merge_exact_matches
     merge_fuzzy_matches if with_fuzzy_matching
     merge_no_matches
+    FamilyReunion.logger_write(self.object_id, "Merging is complete")
     @merges
   end
 
