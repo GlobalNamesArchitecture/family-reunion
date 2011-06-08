@@ -8,9 +8,13 @@ class FamilyReunion
     end
 
     def merge
+      FamilyReunion.logger_write(@fr.object_id, "Merging fuzzy matches of accepted names")
       add_matches(get_valid_matches, :fuzzy_valid_to_valid)
+      FamilyReunion.logger_write(@fr.object_id, "Merging fuzzy matches of accepted names to synonyms")
       add_matches(get_valid_to_synonym_matches, :fuzzy_valid_to_synonym)
+      FamilyReunion.logger_write(@fr.object_id, "Merging fuzzy matches of synonyms to accepted names")
       add_matches(get_synonym_to_valid_matches, :fuzzy_synonym_to_valid)
+      FamilyReunion.logger_write(@fr.object_id, "Merging fuzzy matches of synonyms")
       add_matches(get_synonym_to_synonym_matches, :fuzzy_synonym_to_synonym)
     end
 

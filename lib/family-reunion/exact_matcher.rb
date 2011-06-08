@@ -7,9 +7,13 @@ class FamilyReunion
     end
 
     def merge
+      FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of accepted names")
       add_valid_matches(get_valid_matches)
+      FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of accepted names to synonyms")
       add_synonym_matches(get_valid_to_synonym_matches, :valid_to_synonym)
+      FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of synonyms to accepted names")
       add_synonym_matches(get_synonym_to_valid_matches, :synonym_to_valid)
+      FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of synonyms")
       add_synonym_matches(get_synonym_to_synonym_matches, :synonym_to_synonym)
     end
 
@@ -36,7 +40,7 @@ class FamilyReunion
     def get_synonym_to_valid_matches
       @fr.primary_synonyms_set & @fr.secondary_valid_names_set
     end
-    
+
     def get_synonym_to_synonym_matches
       @fr.primary_synonyms_set & @fr.secondary_synonyms_set
     end

@@ -1,3 +1,4 @@
+require 'logger'
 require 'json'
 require 'taxamatch_rb'
 require 'family-reunion/cache'
@@ -14,6 +15,24 @@ class FamilyReunion
   attr :primary_node, :secondary_node, :merges
   attr :primary_valid_names_set, :secondary_valid_names_set
   attr :primary_synonyms_set, :secondary_synonyms_set
+
+  VERSION = open(File.join(File.dirname(__FILE__), '..', 'VERSION')).readline.strip
+
+  def self.logger
+    @@logger ||= Logger.new(nil)
+  end
+
+  def self.logger=(logger)
+    @@logger = logger
+  end
+
+  def self.logger_reset
+    self.logger = Logger.new(nil)
+  end
+
+  def self.logger_write(obj_id, message, method = :info)
+    self.logger.send(method, "|%s|%s|" % [obj_id, message])
+  end
 
   def initialize(primary_node, secondary_node)
     @primary_node = FamilyReunion::TopNode.new(primary_node)
@@ -35,14 +54,17 @@ class FamilyReunion
   private
 
   def merge_exact_matches
+    FamilyReunion.logger_write(self.object_id, "Started merging of exact matches")
     ExactMatcher.new(self).merge
   end
 
   def merge_fuzzy_matches
+    FamilyReunion.logger_write(self.object_id, "Started merging of fuzzy matches")
     FuzzyMatcher.new(self).merge
   end
-  
+
   def merge_no_matches
+    FamilyReunion.logger_write(self.object_id, "Started gap filling, adding new species and uninomials")
     NomatchOrganizer.new(self).merge
   end
 
