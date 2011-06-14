@@ -27,9 +27,9 @@ class FamilyReunion
       # Homonyms are treated separately, and are not matched by the algorithm,
       # they are excluded from valid_matches
       valid_matches.each do |name|
-        primary_id = @fr.primary_node.valid_names_hash[name][:id]
-        secondary_id = @fr.secondary_node.valid_names_hash[name][:id]
-        @fr.merges[primary_id] = {:matches => {secondary_id.to_s => {:match_type => :valid_to_valid}}, :nonmatches => []}
+        primary_id = @fr.primary_node.valid_names_hash[name][:id].to_s.to_sym
+        secondary_id = @fr.secondary_node.valid_names_hash[name][:id].to_s.to_sym
+        @fr.merges[primary_id] = {:matches => {secondary_id => {:match_type => :valid_to_valid}}, :nonmatches => []}
       end
     end
 
@@ -65,9 +65,9 @@ class FamilyReunion
       valid_names = node.valid_names_hash
       synonyms = node.synonyms_hash
       if valid_names.has_key?(name)
-        return [valid_names[name][:id]]
+        return [valid_names[name][:id].to_s.to_sym]
       else
-        return synonyms[name].map {|n| n[:id]}
+        return synonyms[name].map {|n| n[:id].to_s.to_sym}
       end
     end
 

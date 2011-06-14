@@ -76,7 +76,7 @@ class FamilyReunion
 
     def update_paths_hash(node)
       path = node[:path].map { |n| n.to_sym }
-      path_ids = node[:path_ids].map { |i| i.to_sym }
+      path_ids = node[:path_ids].map { |i| i.to_s.to_sym }
       until path.empty?
         populate_paths_hash(path, path_ids)
         path.pop
