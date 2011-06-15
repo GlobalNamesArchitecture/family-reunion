@@ -14,7 +14,7 @@ class FamilyReunion
     def get_nomach_secondary_ids
       return @nomatch_secondary_ids if @nomatch_secondary_ids
       match_ids = @fr.merges.map { |key, val| val[:matches].keys }.flatten.uniq
-      empty_nodes_ids =  @fr.secondary_node.data[:empty_nodes].map { |node| node[:id].to_sym }
+      empty_nodes_ids =  @fr.secondary_node.data[:empty_nodes].map { |node| node[:id].to_s.to_sym }
       valid_names_ids = @fr.secondary_node.ids_hash.keys.map { |k| k }
       @nomatch_secondary_ids = valid_names_ids - match_ids
     end
@@ -39,18 +39,21 @@ class FamilyReunion
         name = path.pop.to_sym
         if paths_hash.has_key?(name)
           found_node = true
-          add_merged_node(paths_hash[name][1][-1], node[:id])
+          add_merged_node(paths_hash[name][1][-1], node[:id].to_s.to_sym)
           break
         end
       end
-      add_merged_node(@fr.primary_node.root_id, node[:id]) unless found_node
+      add_merged_node(@fr.primary_node.root_id, node[:id].to_s.to_sym) unless found_node
     end
 
     def add_merged_node(primary_node_id, secondary_node_id)
-      if @fr.merges.has_key?(primary_node_id)
-        @fr.merges[primary_node_id][:nonmatches] << secondary_node_id
+      secondary_node_id = secondary_node_id.to_s.to_sym
+      path = @fr.secondary_node.ids_hash[secondary_node_id][:path]
+      path_ids = @fr.secondary_node.ids_hash[secondary_node_id][:path_ids]
+      if @fr.merges.has_key?(primary_node_id) #never happens?
+        @fr.merges[primary_node_id][:nonmatches][secondary_node_id] = { :match_type => nil, :path => path, :path_ids => path_ids }
       else
-        @fr.merges[primary_node_id] = {:matches => [], :nonmatches => [secondary_node_id]}
+        @fr.merges[primary_node_id] = { :matches => {}, :nonmatches => {secondary_node_id => { :match_type => nil, :path => path, :path_ids => path_ids } } }
       end
     end
 

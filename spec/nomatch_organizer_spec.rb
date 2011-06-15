@@ -18,6 +18,6 @@ describe FamilyReunion::NomatchOrganizer do
   it "should be able to assign nomatches to branches in primary node" do
     @fr.stubs(:merges => @merges)
     @no.merge
-    puts ''
+    @fr.merges.select {|k, v| !v[:nonmatches].empty?}.inject(0) {|res, data| res += data.size; res }.should == 62
   end
 end

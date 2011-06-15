@@ -24,9 +24,9 @@ describe FamilyReunion::FuzzyMatcher do
   end
 
   it "should be able to add matches to merges object" do
-    matched_nodes =  [[{:id=>"invasiveants:tid:1453", :path=>["Formicidae", "Pachycondlya", "Pachycondlya solitaria"], :path_ids=>["invasiveants:tid:1381", "invasiveants:tid:1452", "invasiveants:tid:1453"], :rank=>"species", :valid_name=>{:name=>"Pachycondlya solitaria (Smith, F. 1860)", :canonical_name=>"Pachycondlya solitaria", :type=>"valid", :status=>nil}, :synonyms=>[], :name_to_match=>"Pachycondlya solitaria (Smith, F. 1860)"}, [{:id=>"hex10354887", :path=>["Formicidae", "Pachycondyla", "Pachycondyla solitaria"], :path_ids=>["hex100521", "hex1022882", "hex10354887"], :rank=>"species", :valid_name=>{:name=>"Pachycondyla solitaria (Smith, 1860)", :canonical_name=>"Pachycondyla solitaria", :type=>"valid", :status=>"accepted"}, :synonyms=>[], :name_to_match=>"Pachycondyla solitaria (Smith, 1860)"}]]]
-    @fm.add_matches(matched_nodes)
-    @fr.merges.should == ''
+    @fr.stubs(:merges => {})
+    @fm.merge
+    @fr.merges.should == {:"invasiveants:tid:1453"=>{:matches=>{:hex10354887=>{:match_type=>:fuzzy_valid_to_valid, :path=>["Formicidae", "Pachycondyla", "Pachycondyla solitaria"], :path_ids=>["hex100521", "hex1022882", "hex10354887"]}}, :nonmatches=>{}}, :"invasiveants:tid:1407"=>{:matches=>{:hex10758181=>{:match_type=>:fuzzy_valid_to_synonym, :path=>["Formicidae", "Trapeziopelta", "Trapeziopelta diadela"], :path_ids=>["hex100521", "hex1057748", "hex10758181"]}, :hex10758108=>{:match_type=>:fuzzy_synonym_to_valid, :path=>["Formicidae", "Nothosphinctus", "Nothosphinctus silaceus"], :path_ids=>["hex100521", "hex1057733", "hex10758108"]}}, :nonmatches=>{}}, :"invasiveants:tid:1397"=>{:matches=>{:hex10357934=>{:match_type=>:fuzzy_synonym_to_synonym, :path=>["Formicidae", "Formica", "Formica lavateri"], :path_ids=>["hex100521", "hex1023020", "hex10357934"]}}, :nonmatches=>{}}}
   end
 
 end

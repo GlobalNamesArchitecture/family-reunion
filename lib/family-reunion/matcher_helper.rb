@@ -4,7 +4,9 @@ class FamilyReunion
     def format_secondary_id_for_merge(secondary_ids, match_type)
       secondary_ids.inject({}) do |res, i|
         raise "Secondary id is not a symbol" unless i.is_a?(Symbol)
-        res[i] = {:match_type => match_type} unless res.has_key?(i)
+        path = @fr.secondary_node.ids_hash[i][:path]
+        path_ids = @fr.secondary_node.ids_hash[i][:path_ids]
+        res[i] = {:match_type => match_type, :path => path, :path_ids => path_ids} unless res.has_key?(i)
         res
       end
     end
@@ -16,7 +18,7 @@ class FamilyReunion
           @fr.merges[primary_id][:matches][key] = val unless @fr.merges[primary_id][:matches].has_key?(key)
         end
       else
-        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => []}
+        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => {}}
       end
     end
   end

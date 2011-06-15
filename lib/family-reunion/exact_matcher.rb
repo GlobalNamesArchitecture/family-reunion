@@ -10,11 +10,11 @@ class FamilyReunion
       FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of accepted names")
       add_valid_matches(get_valid_matches)
       FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of accepted names to synonyms")
-      add_synonym_matches(get_valid_to_synonym_matches, :valid_to_synonym)
+      add_synonym_matches(get_valid_to_synonym_matches, :exact_valid_to_synonym)
       FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of synonyms to accepted names")
-      add_synonym_matches(get_synonym_to_valid_matches, :synonym_to_valid)
+      add_synonym_matches(get_synonym_to_valid_matches, :exact_synonym_to_valid)
       FamilyReunion.logger_write(@fr.object_id, "Merging exact matches of synonyms")
-      add_synonym_matches(get_synonym_to_synonym_matches, :synonym_to_synonym)
+      add_synonym_matches(get_synonym_to_synonym_matches, :exact_synonym_to_synonym)
     end
 
     private
@@ -28,8 +28,10 @@ class FamilyReunion
       # they are excluded from valid_matches
       valid_matches.each do |name|
         primary_id = @fr.primary_node.valid_names_hash[name][:id].to_s.to_sym
+        path = @fr.primary_node.valid_names_hash[name][:path]
+        path_ids = @fr.primary_node.valid_names_hash[name][:path_ids]
         secondary_id = @fr.secondary_node.valid_names_hash[name][:id].to_s.to_sym
-        @fr.merges[primary_id] = {:matches => {secondary_id => {:match_type => :valid_to_valid}}, :nonmatches => []}
+        @fr.merges[primary_id] = {:matches => {secondary_id => {:match_type => :exact_valid_to_valid, :path => path, :path_ids => path_ids }}, :nonmatches => {}}
       end
     end
 

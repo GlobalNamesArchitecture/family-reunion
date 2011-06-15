@@ -48,11 +48,11 @@ class FamilyReunion
     def ids_hash
       return @ids_hash if @ids_hash
       @ids_hash = valid_names_hash.inject({}) do |res, key_val|
-        res[key_val[1][:id].to_sym] = key_val[1]
+        res[key_val[1][:id].to_s.to_sym] = key_val[1]
         res
       end
       data[:empty_nodes].each do |node|
-        @ids_hash[node[:id].to_sym] = node
+        @ids_hash[node[:id].to_s.to_sym] = node
       end
       @ids_hash
     end
@@ -93,7 +93,7 @@ class FamilyReunion
 
     def root_id
       unless @root_id
-        @root_id = data[:leaves][0][:path_ids][0].to_sym
+        @root_id = data[:leaves][0][:path_ids][0].to_s.to_sym
       end
       @root_id
     end
