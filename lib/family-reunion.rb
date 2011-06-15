@@ -41,14 +41,17 @@ class FamilyReunion
     @secondary_valid_names_set = Set.new(@secondary_node.valid_names_hash.keys)
     @primary_synonyms_set = Set.new(@primary_node.synonyms_hash.keys)
     @secondary_synonyms_set = Set.new(@secondary_node.synonyms_hash.keys)
-    @merges = {}
+    @merges = nil
   end
 
-  def merge(with_fuzzy_matching = true)
-    merge_exact_matches
-    merge_fuzzy_matches if with_fuzzy_matching
-    merge_no_matches
-    FamilyReunion.logger_write(self.object_id, "Merging is complete")
+  def merge
+    unless @merges
+      @merges = {}
+      merge_exact_matches
+      merge_fuzzy_matches
+      merge_no_matches
+      FamilyReunion.logger_write(self.object_id, "Merging is complete")
+    end
     @merges
   end
 
