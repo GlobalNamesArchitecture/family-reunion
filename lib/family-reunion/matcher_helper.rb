@@ -18,8 +18,8 @@ class FamilyReunion
           @fr.merges[primary_id][:matches][key] = val unless @fr.merges[primary_id][:matches].has_key?(key)
         end
       else
-        path = @fr.primary_node.ids_hash[i][:path]
-        path_ids = @fr.primary_node.ids_hash[i][:path_ids]     
+        path = @fr.primary_node.ids_hash[primary_id][:path]
+        path_ids = @fr.primary_node.ids_hash[primary_id][:path_ids]     
         @fr.merges[primary_id] = { :path => path, :path_ids => path_ids, :matches => secondary_id_matches, :nonmatches => {} }
       end
     end

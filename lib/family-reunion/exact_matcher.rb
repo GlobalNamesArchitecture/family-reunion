@@ -27,8 +27,8 @@ class FamilyReunion
       # Homonyms are treated separately, and are not matched by the algorithm,
       # they are excluded from valid_matches
       valid_matches.each do |name|
-        pn = @fr.primary_node.valid_names_hash[:name]
-        sn = @fr.secondary_node.valid_names_hash[:name]
+        pn = @fr.primary_node.valid_names_hash[name]
+        sn = @fr.secondary_node.valid_names_hash[name]
         primary_id = pn[:id].to_s.to_sym
         primary_path = pn[:path]
         primary_path_ids = pn[:path_ids]
