@@ -1,12 +1,12 @@
 class FamilyReunion
   module MatcherHelper
     private
-    def format_secondary_id_for_merge(secondary_ids, match_type)
+    def format_secondary_id_for_merge(secondary_ids, merge_type)
       secondary_ids.inject({}) do |res, i|
         raise "Secondary id is not a symbol" unless i.is_a?(Symbol)
         path = @fr.secondary_node.ids_hash[i][:path]
         path_ids = @fr.secondary_node.ids_hash[i][:path_ids]
-        res[i] = {:match_type => match_type, :path => path, :path_ids => path_ids} unless res.has_key?(i)
+        res[i] = {:merge_type => merge_type, :path => path, :path_ids => path_ids} unless res.has_key?(i)
         res
       end
     end

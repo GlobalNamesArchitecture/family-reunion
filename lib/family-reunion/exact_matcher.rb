@@ -31,7 +31,7 @@ class FamilyReunion
         path = @fr.primary_node.valid_names_hash[name][:path]
         path_ids = @fr.primary_node.valid_names_hash[name][:path_ids]
         secondary_id = @fr.secondary_node.valid_names_hash[name][:id].to_s.to_sym
-        @fr.merges[primary_id] = {:matches => {secondary_id => {:match_type => :exact_valid_to_valid, :path => path, :path_ids => path_ids }}, :nonmatches => {}}
+        @fr.merges[primary_id] = {:matches => {secondary_id => {:merge_type => :exact_valid_to_valid, :path => path, :path_ids => path_ids }}, :nonmatches => {}}
       end
     end
 
@@ -47,10 +47,10 @@ class FamilyReunion
       @fr.primary_synonyms_set & @fr.secondary_synonyms_set
     end
 
-    def add_synonym_matches(match_set, match_type)
+    def add_synonym_matches(match_set, merge_type)
       match_set.each do |name|
         primary_ids, secondary_ids = get_valid_name_ids(name)
-        secondary_id_matches = format_secondary_id_for_merge(secondary_ids, match_type)
+        secondary_id_matches = format_secondary_id_for_merge(secondary_ids, merge_type)
         primary_ids.each do |primary_id|
           add_record_to_merges(primary_id, secondary_id_matches)
         end

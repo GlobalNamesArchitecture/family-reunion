@@ -44,11 +44,11 @@ class FamilyReunion
 
     private
 
-    def add_matches(matched_nodes, match_type)
+    def add_matches(matched_nodes, merge_type)
       matched_nodes.each do |primary_node, secondary_nodes|
         primary_id = primary_node[:id].to_s.to_sym
         secondary_ids = secondary_nodes.map { |n| n[:id].to_s.to_sym }
-        secondary_id_matches = format_secondary_id_for_merge(secondary_ids, match_type)
+        secondary_id_matches = format_secondary_id_for_merge(secondary_ids, merge_type)
         add_record_to_merges(primary_id, secondary_id_matches)
       end
     end
