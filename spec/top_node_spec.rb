@@ -18,8 +18,8 @@ describe FamilyReunion::TopNode do
     res[:Linepithema].should == [[:Formicidae, :Linepithema], [:"invasiveants:tid:1381", :"invasiveants:tid:1425"]]
   end
 
-  it "should return root id" do
-    @node.root_id.should == :"invasiveants:tid:1381"
+  it "should return root paths" do
+    @node.root_paths.should == [["Formicidae"], [:"invasiveants:tid:1381"]]
   end
 
 end

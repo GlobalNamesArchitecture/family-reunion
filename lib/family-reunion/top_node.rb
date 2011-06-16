@@ -91,11 +91,12 @@ class FamilyReunion
       end
     end
 
-    def root_id
-      unless @root_id
+    def root_paths
+      unless @root_name && @root_id
         @root_id = data[:leaves][0][:path_ids][0].to_s.to_sym
+        @root_name = data[:leaves][0][:path][0]
       end
-      @root_id
+      [[@root_name], [@root_id]]
     end
 
   end
