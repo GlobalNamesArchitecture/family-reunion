@@ -49,7 +49,7 @@ class FamilyReunion
 
     def add_merged_node(primary_paths, secondary_node_id)
       primary_path = primary_paths[0]
-      primary_path_ids = primary_paths[1]
+      primary_path_ids = primary_paths[1].map { |i| i.to_s }
       primary_node_id = primary_paths[1][-1]
       secondary_node_id = secondary_node_id.to_s.to_sym
       secondary_path = @fr.secondary_node.ids_hash[secondary_node_id][:path]
@@ -57,7 +57,7 @@ class FamilyReunion
       if @fr.merges.has_key?(primary_node_id) #never happens?
         @fr.merges[primary_node_id][:nonmatches][secondary_node_id] = { :merge_type => "new", :path => secondary_path, :path_ids => secondary_path_ids }
       else
-        @fr.merges[primary_node_id] = { :path => primary_path, :path_ids => primary_path_ids, :matches => {}, :nonmatches => {secondary_node_id => { :merge_type => nil, :path => secondary_path, :path_ids => secondary_path_ids } } }
+        @fr.merges[primary_node_id] = { :path => primary_path, :path_ids => primary_path_ids, :matches => {}, :nonmatches => {secondary_node_id => { :merge_type => "new", :path => secondary_path, :path_ids => secondary_path_ids } } }
       end
     end
 
