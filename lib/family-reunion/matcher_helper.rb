@@ -6,7 +6,7 @@ class FamilyReunion
         raise "Secondary id is not a symbol" unless i.is_a?(Symbol)
         path = @fr.secondary_node.ids_hash[i][:path]
         path_ids = @fr.secondary_node.ids_hash[i][:path_ids]
-        res[i] = {:merge_type => merge_type, :path => path, :path_ids => path_ids} unless res.has_key?(i)
+        res[i] = { :merge_type => merge_type, :path => path, :path_ids => path_ids } unless res.has_key?(i)
         res
       end
     end
@@ -18,7 +18,9 @@ class FamilyReunion
           @fr.merges[primary_id][:matches][key] = val unless @fr.merges[primary_id][:matches].has_key?(key)
         end
       else
-        @fr.merges[primary_id] = {:matches => secondary_id_matches, :nonmatches => {}}
+        path = @fr.primary_node.ids_hash[i][:path]
+        path_ids = @fr.primary_node.ids_hash[i][:path_ids]     
+        @fr.merges[primary_id] = { :path => path, :path_ids => path_ids, :matches => secondary_id_matches, :nonmatches => {} }
       end
     end
   end

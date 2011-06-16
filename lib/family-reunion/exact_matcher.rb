@@ -27,11 +27,23 @@ class FamilyReunion
       # Homonyms are treated separately, and are not matched by the algorithm,
       # they are excluded from valid_matches
       valid_matches.each do |name|
-        primary_id = @fr.primary_node.valid_names_hash[name][:id].to_s.to_sym
-        path = @fr.primary_node.valid_names_hash[name][:path]
-        path_ids = @fr.primary_node.valid_names_hash[name][:path_ids]
-        secondary_id = @fr.secondary_node.valid_names_hash[name][:id].to_s.to_sym
-        @fr.merges[primary_id] = {:matches => {secondary_id => {:merge_type => :exact_valid_to_valid, :path => path, :path_ids => path_ids }}, :nonmatches => {}}
+        pn = @fr.primary_node.valid_names_hash[:name]
+        sn = @fr.secondary_node.valid_names_hash[:name]
+        primary_id = pn[:id].to_s.to_sym
+        primary_path = pn[:path]
+        primary_path_ids = pn[:path_ids]
+        secondary_id = sn[:id].to_s.to_sym
+        secondary_path = sn[:path]
+        secondary_path_ids = sn[:path_ids]
+        @fr.merges[primary_id] = { 
+          :path => primary_path, 
+          :path_ids => primary_path_ids, 
+          :matches => {secondary_id => {
+            :merge_type => :exact_valid_to_valid, 
+            :path => secondary_path, 
+            :path_ids => secondary_path_ids}}, 
+          :nonmatches => {}
+        }
       end
     end
 
