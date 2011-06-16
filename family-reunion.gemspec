@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{family-reunion}
-  s.version = "0.1.6"
+  s.version = "0.1.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dmitry Mozzherin", "David Shorthouse"]
-  s.date = %q{2011-06-15}
+  s.date = %q{2011-06-16}
   s.description = %q{An algorithm to merge related nodes of two taxonomic hierarchies with synonym information}
   s.email = %q{dmozzherin@gmail.com}
   s.extra_rdoc_files = [
