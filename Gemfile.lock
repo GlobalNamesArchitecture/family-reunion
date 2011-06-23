@@ -1,12 +1,11 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    RubyInline (3.9.0)
-      ZenTest (~> 4.3)
-    ZenTest (4.5.0)
     archive-tar-minitar (0.5.2)
     biodiversity (0.7.3)
       json
+      treetop
+    biodiversity19 (0.7.3)
       treetop
     builder (3.0.0)
     columnize (0.3.2)
@@ -58,9 +57,9 @@ GEM
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     shoulda (2.11.3)
-    taxamatch_rb (0.6.5)
-      RubyInline
-      biodiversity (>= 0.5.13)
+    taxamatch_rb (0.7.6)
+      biodiversity (~> 0.7.3)
+      biodiversity19 (~> 0.7.3)
     term-ansicolor (1.0.5)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -79,4 +78,4 @@ DEPENDENCIES
   ruby-debug19
   ruby-prof
   shoulda
-  taxamatch_rb (>= 0.6.5)
+  taxamatch_rb (~> 0.7.6)
